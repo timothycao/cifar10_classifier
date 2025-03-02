@@ -1,0 +1,10 @@
+# Python venv
+.venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Kaggle inference dataset
+cifar_test_nolabel.pkl
