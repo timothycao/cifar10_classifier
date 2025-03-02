@@ -1,3 +1,4 @@
+import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -34,6 +35,9 @@ def train(model, trainloader, loss_func, optimizer, device):
     accuracy = 100 * correct / total
     print(f'TRAIN:  Loss: {train_loss:.4f}  Accuracy: {accuracy:.2f}%')
 
+    # Return accuracy to track best model
+    return accuracy
+
 
 def test(model, testloader, loss_func, device):
     model.eval()
@@ -58,10 +62,15 @@ def test(model, testloader, loss_func, device):
     accuracy = 100 * correct / total
     print(f'TEST:   Loss: {test_loss:.4f}  Accuracy: {accuracy:.2f}%')
 
+    return accuracy
+
 
 if __name__ == '__main__':
     # Set device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    # Ensure saved_models directory exists
+    os.makedirs('saved_models', exist_ok=True)
 
     # Define data preprocessing transformations
     transform = transforms.Compose([
@@ -92,9 +101,17 @@ if __name__ == '__main__':
 
     # Train model for multiple epochs
     print('Training model...')
-    epochs = 1
+    epochs = 3
+    best_accuracy = 0.0
     for i in range(epochs):
         print(f'Epoch: {i+1}/{epochs}')
-        train(model, trainloader, loss_func, optimizer, device)
-        test(model, testloader, loss_func, device)
+        train_accuracy = train(model, trainloader, loss_func, optimizer, device)
+        test_accuracy = test(model, testloader, loss_func, device)
+
+        # Save model with best test accuracy
+        if test_accuracy > best_accuracy:
+            best_accuracy = test_accuracy
+            torch.save(model.state_dict(), 'saved_models/best_model.pth')
+            print('Model saved')
+
     print('Training complete')
