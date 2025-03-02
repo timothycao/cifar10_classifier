@@ -6,5 +6,8 @@ __pycache__/
 *.pyc
 *.pyo
 
+# CIFAR-10 dataset
+data/
+
 # Kaggle inference dataset
 cifar_test_nolabel.pkl
