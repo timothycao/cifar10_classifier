@@ -6,7 +6,7 @@ import torchvision.transforms as transforms
 from model import ResNet
 
 
-def train(model, trainloader, loss_func, optimizer, device, epoch):
+def train(model, trainloader, loss_func, optimizer, device):
     model.train()
     train_loss = 0
     correct = 0
@@ -32,7 +32,31 @@ def train(model, trainloader, loss_func, optimizer, device, epoch):
     # Compute average loss and accuracy for the epoch
     train_loss /= len(trainloader)
     accuracy = 100 * correct / total
-    print(f'Loss: {train_loss:.4f}  Accuracy: {accuracy:.2f}%')
+    print(f'TRAIN:  Loss: {train_loss:.4f}  Accuracy: {accuracy:.2f}%')
+
+
+def test(model, testloader, loss_func, device):
+    model.eval()
+    test_loss = 0
+    correct = 0
+    total = 0
+
+    with torch.no_grad():
+        for batch_idx, (images, labels) in enumerate(testloader):
+            images, labels = images.to(device), labels.to(device)
+
+            outputs = model(images)
+            loss = loss_func(outputs, labels)
+
+            test_loss += loss.item()
+
+            _, predicted = outputs.max(1)
+            correct += (predicted == labels).sum().item()
+            total += labels.size(0)
+    
+    test_loss /= len(testloader)
+    accuracy = 100 * correct / total
+    print(f'TEST:   Loss: {test_loss:.4f}  Accuracy: {accuracy:.2f}%')
 
 
 if __name__ == '__main__':
@@ -46,12 +70,16 @@ if __name__ == '__main__':
     ])
 
     # Load CIFAR-10 training dataset
-    print('Loading data...')
+    print('Loading training data...')
     trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
-    
-    # Wrap dataset in DataLoader for batching
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=128, shuffle=True, num_workers=2)
     print(f'Loaded {len(trainset)} training images')
+
+    # Load CIFAR-10 test dataset
+    print('Loading test data...')
+    testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
+    testloader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False, num_workers=2)
+    print(f'Loaded {len(testset)} test images')
 
     # Initialize model
     print('Initializing model...')
@@ -64,8 +92,9 @@ if __name__ == '__main__':
 
     # Train model for multiple epochs
     print('Training model...')
-    epochs = 3
+    epochs = 1
     for i in range(epochs):
-        print(f'Epoch: {i+1}')
-        train(model, trainloader, loss_func, optimizer, device, epoch=i)
+        print(f'Epoch: {i+1}/{epochs}')
+        train(model, trainloader, loss_func, optimizer, device)
+        test(model, testloader, loss_func, device)
     print('Training complete')
