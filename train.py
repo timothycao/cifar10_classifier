@@ -7,6 +7,46 @@ import torchvision.transforms as transforms
 from model import ResNet
 
 
+def load_data(train_batch_size=128, test_batch_size=100):
+    # Define data preprocessing transformations
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))    # Normalize using CIFAR-10 mean and std
+    ])
+
+    print('Loading data...')
+
+    # Load CIFAR-10 training dataset
+    trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
+    trainloader = torch.utils.data.DataLoader(trainset, batch_size=train_batch_size, shuffle=True, num_workers=2)
+
+    # Load CIFAR-10 test dataset
+    testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
+    testloader = torch.utils.data.DataLoader(testset, batch_size=test_batch_size, shuffle=False, num_workers=2)
+
+    # print(f'Loaded {len(trainset)} training images and {len(testset)} test images')
+
+    return trainloader, testloader
+
+
+def save_model(model, epoch, accuracy, save='every', every_n=1):
+    # Ensure saved_models directory exists
+    os.makedirs('saved_models', exist_ok=True)
+    
+    # Extract model name
+    model_name = model.__class__.__name__.lower()
+
+    # Determine filename based on save type
+    filename = None
+    if save == 'every' and epoch % every_n == 0:
+        filename = f'{model_name}_epoch{epoch}_acc{round(accuracy)}.pth'
+
+    # Save model in saved_models directory
+    if filename:
+        torch.save(model.state_dict(), f'saved_models/{filename}')
+        print(f'Model saved as {filename}')
+
+
 def train(model, trainloader, loss_func, optimizer, device):
     model.train()
     train_loss = 0
@@ -65,35 +105,17 @@ def test(model, testloader, loss_func, device):
     return accuracy
 
 
-if __name__ == '__main__':
+def train_test(model, epochs, save='best', every_n=1):
     # Set device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    # Ensure saved_models directory exists
-    os.makedirs('saved_models', exist_ok=True)
-
-    # Define data preprocessing transformations
-    transform = transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))    # Normalize using CIFAR-10 mean and std
-    ])
-
-    # Load CIFAR-10 training dataset
-    print('Loading training data...')
-    trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
-    trainloader = torch.utils.data.DataLoader(trainset, batch_size=128, shuffle=True, num_workers=2)
-    print(f'Loaded {len(trainset)} training images')
-
-    # Load CIFAR-10 test dataset
-    print('Loading test data...')
-    testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
-    testloader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False, num_workers=2)
-    print(f'Loaded {len(testset)} test images')
+    # Load data
+    trainloader, testloader = load_data()
 
     # Initialize model
     print('Initializing model...')
-    model = ResNet().to(device)
-    print(f'Model initialized on {device}')
+    model = model.to(device)
+    # print(f'Model initialized on {device}')
 
     # Define loss function and optimizer
     loss_func = nn.CrossEntropyLoss()
@@ -101,17 +123,31 @@ if __name__ == '__main__':
 
     # Train model for multiple epochs
     print('Training model...')
-    epochs = 3
     best_accuracy = 0.0
-    for i in range(epochs):
-        print(f'Epoch: {i+1}/{epochs}')
+    best_epoch = 0
+    for epoch in range(1, epochs + 1):
+        print(f'Epoch: {epoch}/{epochs}')
         train_accuracy = train(model, trainloader, loss_func, optimizer, device)
         test_accuracy = test(model, testloader, loss_func, device)
 
-        # Save model with best test accuracy
+        # Track best model for 'best' save type
         if test_accuracy > best_accuracy:
             best_accuracy = test_accuracy
-            torch.save(model.state_dict(), 'saved_models/best_model.pth')
-            print('Model saved')
+            best_epoch = epoch
+
+        # Save model based on save type (not 'best')
+        save_model(model, epoch, test_accuracy, save, every_n)
+    
+    if save == 'best':
+        # Save best model using default save='every' and every_n=1
+        save_model(model, best_epoch, best_accuracy)
 
     print('Training complete')
+
+
+if __name__ == '__main__':
+    model = ResNet()
+    epochs = 3
+    train_test(model, epochs, save='best')
+    # train_test(model, epochs, save='every')
+    # train_test(model, epochs, save='every', every_n=epochs)
