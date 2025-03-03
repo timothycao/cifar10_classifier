@@ -7,6 +7,10 @@ import torchvision.transforms as transforms
 from model import ResNet
 
 
+def count_parameters(model):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+
 def load_data(train_batch_size=128, test_batch_size=100):
     # Define data preprocessing transformations
     transform = transforms.Compose([
@@ -105,7 +109,13 @@ def test(model, testloader, loss_func, device):
     return accuracy
 
 
-def train_test(model, epochs, save='best', every_n=1):
+def main(model, epochs, save='best', every_n=1):
+    # Count model parameters
+    total_params = count_parameters(model)
+    print(f'Total model parameters: {total_params}')
+    if total_params > 5_000_000:
+        raise ValueError('Model cannot have more than 5 million parameters')
+
     # Set device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -148,6 +158,6 @@ def train_test(model, epochs, save='best', every_n=1):
 if __name__ == '__main__':
     model = ResNet()
     epochs = 3
-    train_test(model, epochs, save='best')
-    # train_test(model, epochs, save='every')
-    # train_test(model, epochs, save='every', every_n=epochs)
+    main(model, epochs, save='best')
+    # main(model, epochs, save='every')
+    # main(model, epochs, save='every', every_n=epochs)
