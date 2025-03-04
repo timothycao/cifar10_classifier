@@ -1,4 +1,3 @@
-import torch
 import torch.nn as nn
 
 
@@ -98,16 +97,11 @@ class ResNet(nn.Module):
         return x
 
 
-# Standard ResNet models
-def ResNet18(): return ResNet(ResBlock, [2, 2, 2, 2], name='ResNet18')
-def ResNet34(): return ResNet(ResBlock, [3, 4, 6, 3], name='ResNet34')
-
-
-# Custom ResNet models (for testing)
-def ResNetCustom(): return ResNet(ResBlock, [1, 1, 1, 1], in_channels=8, name='ResNetCustom')
+def create_model(num_blocks_per_layer, in_channels, name):
+    return ResNet(ResBlock, num_blocks_per_layer, in_channels, name)
 
 
 if __name__ == '__main__':
-    # model = ResNet18()
-    model = ResNetCustom()
+    model = create_model([2, 2, 2, 2], in_channels=64, name='ResNet18')
+    # model = create_model([3, 4, 6, 3], in_channels=64, name='ResNet34')
     print('Total model parameters:', sum(p.numel() for p in model.parameters() if p.requires_grad))

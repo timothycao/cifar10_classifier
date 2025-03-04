@@ -33,15 +33,8 @@ def load_model(filename, device):
 
     # Load model
     print(f'Loading model...')
-    model_name = filename.split('_')[0] # Get model name
-
-    # Ensure model function exists
-    if model_name not in globals():
-        raise NameError(f'Function {model_name} not found in model.py')
-
-    model_func = globals()[model_name]  # Get model function from globals
-    model = model_func().to(device)
-    model.load_state_dict(torch.load(f'saved_models/{filename}', map_location=device))
+    model = torch.load(f'saved_models/{filename}', map_location=device, weights_only=False)
+    model.to(device)
     # print(f'Model {filename} loaded')
 
     return model

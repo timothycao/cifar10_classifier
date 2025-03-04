@@ -37,7 +37,7 @@ def save_model(model, epoch, accuracy, save='every', every_n=1):
     # Ensure saved_models directory exists
     os.makedirs('saved_models', exist_ok=True)
     
-    # Extract model function name
+    # Extract model name
     model_name = getattr(model, 'name')
 
     # Determine filename based on save type
@@ -47,7 +47,7 @@ def save_model(model, epoch, accuracy, save='every', every_n=1):
 
     # Save model in saved_models directory
     if filename:
-        torch.save(model.state_dict(), f'saved_models/{filename}')
+        torch.save(model, f'saved_models/{filename}')
         print(f'Model saved as {filename}')
 
 
@@ -132,11 +132,6 @@ def main(model, epochs, save='best', every_n=1):
     model = model.to(device)
     # print(f'Model initialized on {device}')
 
-   # Ensure model function exists (for saving, and loading in inference.py)
-    model_name = getattr(model, 'name')
-    if not model_name or model_name not in globals():
-        raise NameError(f'Function {model_name} not found in model.py')
-
     # Define loss function and optimizer
     loss_func = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=5e-4)
@@ -166,8 +161,8 @@ def main(model, epochs, save='best', every_n=1):
 
 
 if __name__ == '__main__':
-    # model = ResNet18()
-    model = ResNetCustom()
+    # model = create_model([2, 2, 2, 2], in_channels=64, name='ResNet18')
+    model = create_model([1, 1, 1, 1], in_channels=8, name='ResNetCustom')
     epochs = 3
 
     try:
