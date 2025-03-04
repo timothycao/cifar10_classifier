@@ -116,6 +116,11 @@ def main(model, epochs, save='best', every_n=1):
     if total_params > 5_000_000:
         raise ValueError('Model cannot have more than 5 million parameters')
 
+    # Ensure save option is valid
+    save_options = ['best', 'every']
+    if save not in save_options:
+        raise ValueError(f'Save option must be one of: {save_options}')
+
     # Set device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -126,6 +131,11 @@ def main(model, epochs, save='best', every_n=1):
     print('Initializing model...')
     model = model.to(device)
     # print(f'Model initialized on {device}')
+
+   # Ensure model function exists (for saving, and loading in inference.py)
+    model_name = getattr(model, 'name')
+    if not model_name or model_name not in globals():
+        raise NameError(f'Function {model_name} not found in model.py')
 
     # Define loss function and optimizer
     loss_func = nn.CrossEntropyLoss()
@@ -158,7 +168,11 @@ def main(model, epochs, save='best', every_n=1):
 if __name__ == '__main__':
     # model = ResNet18()
     model = ResNetCustom()
-    epochs = 1
-    main(model, epochs, save='best')
-    # main(model, epochs, save='every')
-    # main(model, epochs, save='every', every_n=epochs)
+    epochs = 3
+
+    try:
+        main(model, epochs, save='best')    # Save best model only
+        # main(model, epochs, save='every')   # Save every epoch
+        # main(model, epochs, save='every', every_n=epochs)   # Save every n epochs
+    except (ValueError, NameError) as e:
+        print(f'ERROR: {e}')

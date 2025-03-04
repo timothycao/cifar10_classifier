@@ -27,9 +27,18 @@ def load_model(filename, device):
     # Ensure saved_models directory exist
     os.makedirs('saved_models', exist_ok=True)
 
+    # Ensure file exists in saved_models directory
+    if not os.path.exists(f'saved_models/{filename}'):
+        raise FileNotFoundError(f'{filename} not found in saved_models/')
+
     # Load model
     print(f'Loading model...')
     model_name = filename.split('_')[0] # Get model name
+
+    # Ensure model function exists
+    if model_name not in globals():
+        raise NameError(f'Function {model_name} not found in model.py')
+
     model_func = globals()[model_name]  # Get model function from globals
     model = model_func().to(device)
     model.load_state_dict(torch.load(f'saved_models/{filename}', map_location=device))
@@ -94,4 +103,7 @@ def main(filename=None):
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except (FileNotFoundError, NameError) as e:
+        print(f'ERROR: {e}')

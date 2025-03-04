@@ -49,7 +49,7 @@ class ResBlock(nn.Module):
 
 # ResNet Model (supports custom depth and initial channels)
 class ResNet(nn.Module):
-    def __init__(self, block, num_blocks_per_layer, in_channels=64, name='ResNet'):
+    def __init__(self, block, num_blocks_per_layer, in_channels=64, name=None):
         super(ResNet, self).__init__()
         self.in_channels = in_channels  # Initial number of channels
         self.name = name
