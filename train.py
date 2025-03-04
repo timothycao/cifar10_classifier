@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torchvision
 import torchvision.transforms as transforms
-from model import ResNet
+from model import *
 
 
 def count_parameters(model):
@@ -37,8 +37,8 @@ def save_model(model, epoch, accuracy, save='every', every_n=1):
     # Ensure saved_models directory exists
     os.makedirs('saved_models', exist_ok=True)
     
-    # Extract model name
-    model_name = model.__class__.__name__.lower()
+    # Extract model function name
+    model_name = getattr(model, 'name')
 
     # Determine filename based on save type
     filename = None
@@ -156,8 +156,9 @@ def main(model, epochs, save='best', every_n=1):
 
 
 if __name__ == '__main__':
-    model = ResNet()
-    epochs = 3
+    # model = ResNet18()
+    model = ResNetCustom()
+    epochs = 1
     main(model, epochs, save='best')
     # main(model, epochs, save='every')
     # main(model, epochs, save='every', every_n=epochs)

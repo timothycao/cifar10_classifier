@@ -4,7 +4,7 @@ import torch
 import torchvision.transforms as transforms
 import pickle
 import pandas as pd
-from model import ResNet
+from model import *
 
 
 def load_data():
@@ -29,7 +29,9 @@ def load_model(filename, device):
 
     # Load model
     print(f'Loading model...')
-    model = ResNet().to(device)
+    model_name = filename.split('_')[0] # Get model name
+    model_func = globals()[model_name]  # Get model function from globals
+    model = model_func().to(device)
     model.load_state_dict(torch.load(f'saved_models/{filename}', map_location=device))
     # print(f'Model {filename} loaded')
 

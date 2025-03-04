@@ -49,9 +49,10 @@ class ResBlock(nn.Module):
 
 # ResNet Model (supports custom depth and initial channels)
 class ResNet(nn.Module):
-    def __init__(self, block, num_blocks_per_layer, in_channels=64):
+    def __init__(self, block, num_blocks_per_layer, in_channels=64, name='ResNet'):
         super(ResNet, self).__init__()
         self.in_channels = in_channels  # Initial number of channels
+        self.name = name
         
         # Initial convolutional layer
         self.input_layer = nn.Sequential(
@@ -98,12 +99,12 @@ class ResNet(nn.Module):
 
 
 # Standard ResNet models
-def ResNet18(): return ResNet(ResBlock, [2, 2, 2, 2])
-def ResNet34(): return ResNet(ResBlock, [3, 4, 6, 3])
+def ResNet18(): return ResNet(ResBlock, [2, 2, 2, 2], name='ResNet18')
+def ResNet34(): return ResNet(ResBlock, [3, 4, 6, 3], name='ResNet34')
 
 
 # Custom ResNet models (for testing)
-def ResNetCustom(): return ResNet(ResBlock, [1, 1, 1, 1], in_channels=8)
+def ResNetCustom(): return ResNet(ResBlock, [1, 1, 1, 1], in_channels=8, name='ResNetCustom')
 
 
 if __name__ == '__main__':
