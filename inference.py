@@ -4,6 +4,7 @@ import torch
 import torchvision.transforms as transforms
 import pickle
 import pandas as pd
+import numpy as np
 from model import *
 
 
@@ -12,13 +13,19 @@ def load_data():
     print('Loading data...')
     with open('cifar_test_nolabel.pkl', 'rb') as f:
         data = pickle.load(f, encoding='bytes')
-    test_images = torch.tensor(data[b'data']).float()   # Convert to float tensor
-    # print(f'Loaded {len(test_images)} test images')
+    test_images = data[b'data'] # Extract images
 
-    # Preprocess images
-    test_images = test_images.reshape(-1, 3, 32, 32) / 255.0    # Reshape to (batch size, channels, height, width) and scale to [0,1]
-    test_images = transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))(test_images)
-    # print('Test images preprocessed')
+    # Reshape from (N, H, W, C) → (N, C, H, W) for PyTorch
+    test_images = test_images.reshape(-1, 32, 32, 3).astype(np.uint8)  # Ensure correct shape and data type
+
+    # Define transformation (must match training pipeline)
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
+    ])
+
+    # Apply transformation to each image individually
+    test_images = torch.stack([transform(img) for img in test_images])
 
     return test_images
 
@@ -46,7 +53,7 @@ def save_predictions(predictions, filename):
 
     # Save predictions to CSV in saved_predictions directory
     filename = filename.replace('.pth', '.csv')
-    df = pd.DataFrame({'Id': range(len(predictions)), 'Label': predictions})
+    df = pd.DataFrame({'ID': range(len(predictions)), 'Label': predictions})
     df.to_csv(f'saved_predictions/{filename}', index=False)
     print(f'Predictions saved as {filename}')
 
