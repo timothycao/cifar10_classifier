@@ -11,24 +11,30 @@ def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 
-def load_data(train_batch_size=128, test_batch_size=100):
+def load_data(train_batch_size=128, test_batch_size=100, augment=False):
     # Define data preprocessing transformations
     transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))    # Normalize using CIFAR-10 mean and std
     ])
+    
+    # Data augmentation
+    transform_train = transforms.Compose([
+        transforms.RandomHorizontalFlip(),      # Random horizontal flip
+        transforms.RandomCrop(32, padding=4),   # Random cropping
+        transforms.ToTensor(),
+        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))    # Normalize using CIFAR-10 mean and std
+    ]) if augment else transform
 
     print('Loading data...')
 
     # Load CIFAR-10 training dataset
-    trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
+    trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=train_batch_size, shuffle=True, num_workers=2)
 
     # Load CIFAR-10 test dataset
     testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
     testloader = torch.utils.data.DataLoader(testset, batch_size=test_batch_size, shuffle=False, num_workers=2)
-
-    # print(f'Loaded {len(trainset)} training images and {len(testset)} test images')
 
     return trainloader, testloader
 
@@ -53,9 +59,7 @@ def save_model(model, epoch, accuracy, save='every', every_n=1):
 
 def train(model, trainloader, loss_func, optimizer, device):
     model.train()
-    train_loss = 0
-    correct = 0
-    total = 0
+    train_loss, correct, total = 0, 0, 0
 
     for batch_idx, (images, labels) in enumerate(trainloader):
         images, labels = images.to(device), labels.to(device)
@@ -85,9 +89,7 @@ def train(model, trainloader, loss_func, optimizer, device):
 
 def test(model, testloader, loss_func, device):
     model.eval()
-    test_loss = 0
-    correct = 0
-    total = 0
+    test_loss, correct, total = 0, 0, 0
 
     with torch.no_grad():
         for batch_idx, (images, labels) in enumerate(testloader):
@@ -109,7 +111,8 @@ def test(model, testloader, loss_func, device):
     return accuracy
 
 
-def main(model, epochs, save='best', every_n=1):
+def main(model, epochs, train_batch_size=128, test_batch_size=100, augment=False,
+         optimizer=None, scheduler=None, save='best', every_n=1):
     # Count model parameters
     total_params = count_parameters(model)
     print(f'Total model parameters: {total_params}')
@@ -125,21 +128,29 @@ def main(model, epochs, save='best', every_n=1):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # Load data
-    trainloader, testloader = load_data()
+    trainloader, testloader = load_data(train_batch_size, test_batch_size, augment)
 
     # Initialize model
     print('Initializing model...')
     model = model.to(device)
-    # print(f'Model initialized on {device}')
 
-    # Define loss function and optimizer
+    # Define loss function
     loss_func = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=5e-4)
+    
+    # Ensure optimizer is valid
+    if optimizer and not isinstance(optimizer, optim.Optimizer):
+        raise TypeError('Optimizer must be an instance of torch.optim.Optimizer')
+
+    # Define optimizer
+    optimizer = optimizer if optimizer else optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=5e-4)
+
+    # Ensure scheduler is valid
+    if scheduler and not isinstance(scheduler, optim.lr_scheduler.LRScheduler):
+        raise TypeError('Scheduler must be an instance of torch.optim.lr_scheduler.LRScheduler')
 
     # Train model for multiple epochs
     print('Training model...')
-    best_accuracy = 0.0
-    best_epoch = 0
+    best_accuracy, best_epoch = 0.0, 0
     for epoch in range(1, epochs + 1):
         print(f'Epoch: {epoch}/{epochs}')
         train_accuracy = train(model, trainloader, loss_func, optimizer, device)
@@ -147,11 +158,16 @@ def main(model, epochs, save='best', every_n=1):
 
         # Track best model for 'best' save type
         if test_accuracy > best_accuracy:
-            best_accuracy = test_accuracy
-            best_epoch = epoch
+            best_accuracy, best_epoch = test_accuracy, epoch
 
         # Save model based on save type (not 'best')
         save_model(model, epoch, test_accuracy, save, every_n)
+
+        if scheduler:
+            if isinstance(scheduler, optim.lr_scheduler.ReduceLROnPlateau):
+                scheduler.step(test_accuracy)
+            else:
+                scheduler.step()
     
     if save == 'best':
         # Save best model using default save='every' and every_n=1
@@ -170,10 +186,14 @@ if __name__ == '__main__':
             pool_size=1,
             name='ResNetCustom'
         )
-        epochs = 3
 
-        main(model, epochs, save='best')    # Save best model only
+        epochs = 3
+        optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
+        scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=0.1)
+
+        main(model, epochs, augment=True, optimizer=optimizer, scheduler=scheduler)
+        # main(model, epochs, save='best')    # Save best model only
         # main(model, epochs, save='every')   # Save every epoch
         # main(model, epochs, save='every', every_n=epochs)   # Save every n epochs
-    except (ValueError, NameError, AssertionError) as e:
+    except (AssertionError, ValueError, TypeError) as e:
         print(f'ERROR: {e}')
