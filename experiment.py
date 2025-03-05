@@ -6,7 +6,10 @@ from inference import main as inference
 # Model parameters
 MODEL_NAME = 'ResNetCustom'
 NUM_BLOCKS_PER_LAYER = [1, 1, 1, 1]
-IN_CHANNELS = 8
+NUM_CHANNELS_PER_LAYER = [8, 16, 32, 64]
+KERNEL_SIZE_PER_LAYER = [3, 3, 3, 3]
+SKIP_KERNEL_SIZE_PER_LAYER = [1, 1, 1, 1]
+POOL_SIZE = 1
 
 
 # Training parameters
@@ -16,12 +19,18 @@ SAVE_EVERY_N = 1
 
 
 if __name__ == '__main__':
-    model = create_model(NUM_BLOCKS_PER_LAYER, IN_CHANNELS, MODEL_NAME)
-    
     # Train the model
     try:
+        model = create_model(
+            blocks_per_layer=NUM_BLOCKS_PER_LAYER,
+            channels_per_layer=NUM_CHANNELS_PER_LAYER,
+            kernels_per_layer=KERNEL_SIZE_PER_LAYER,
+            skip_kernels_per_layer=SKIP_KERNEL_SIZE_PER_LAYER,
+            pool_size=POOL_SIZE,
+            name=MODEL_NAME
+        )
         train(model, EPOCHS, SAVE_MODE, SAVE_EVERY_N)
-    except (ValueError, NameError) as e:
+    except (ValueError, NameError, AssertionError) as e:
         print(f'ERROR: {e}')
     
     # Run inference

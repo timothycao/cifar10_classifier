@@ -161,13 +161,19 @@ def main(model, epochs, save='best', every_n=1):
 
 
 if __name__ == '__main__':
-    # model = create_model([2, 2, 2, 2], in_channels=64, name='ResNet18')
-    model = create_model([1, 1, 1, 1], in_channels=8, name='ResNetCustom')
-    epochs = 3
-
     try:
+        model = create_model(
+            blocks_per_layer=[1, 1, 1, 1],
+            channels_per_layer=[8, 16, 32, 64],
+            kernels_per_layer=[3, 3, 3, 3],
+            skip_kernels_per_layer=[1, 1, 1, 1],
+            pool_size=1,
+            name='ResNetCustom'
+        )
+        epochs = 3
+
         main(model, epochs, save='best')    # Save best model only
         # main(model, epochs, save='every')   # Save every epoch
         # main(model, epochs, save='every', every_n=epochs)   # Save every n epochs
-    except (ValueError, NameError) as e:
+    except (ValueError, NameError, AssertionError) as e:
         print(f'ERROR: {e}')
