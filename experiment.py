@@ -14,7 +14,7 @@ POOL_SIZE = 1
 
 
 # Training parameters
-EPOCHS = 3
+EPOCHS = 1
 TRAIN_BATCH_SIZE = 128
 TEST_BATCH_SIZE = 100
 AUGMENT = True
@@ -53,7 +53,7 @@ if __name__ == '__main__':
         SCHEDULER = optim.lr_scheduler.ReduceLROnPlateau(OPTIMIZER, mode='max', factor=0.1, patience=5)
         
         # If no scheduler, set to None
-        SCHEDULER = SCHEDULER if 'SCHEDULER' in locals() else None
+        SCHEDULER = SCHEDULER if 'SCHEDULER' in locals() and SCHEDULER is not None else None
 
         # train(model, EPOCHS)
         train(model, EPOCHS, train_batch_size=TRAIN_BATCH_SIZE, test_batch_size=TEST_BATCH_SIZE, augment=AUGMENT,

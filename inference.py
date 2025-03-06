@@ -1,17 +1,21 @@
 import os
 import glob
+import pickle
+import numpy as np
+import pandas as pd
 import torch
 import torchvision.transforms as transforms
-import pickle
-import pandas as pd
-import numpy as np
 from model import *
+from utils import get_paths
+
+
+_, DATASET_PATH, SAVED_MODELS_PATH, SAVED_PREDICTIONS_PATH = get_paths()
 
 
 def load_data():
     # Load inference test dataset
     print('Loading data...')
-    with open('cifar_test_nolabel.pkl', 'rb') as f:
+    with open(DATASET_PATH, 'rb') as f:
         data = pickle.load(f, encoding='bytes')
     test_images = data[b'data'] # Extract images
 
@@ -32,29 +36,28 @@ def load_data():
 
 def load_model(filename, device):
     # Ensure saved_models directory exist
-    os.makedirs('saved_models', exist_ok=True)
+    os.makedirs(SAVED_MODELS_PATH, exist_ok=True)
 
     # Ensure file exists in saved_models directory
-    if not os.path.exists(f'saved_models/{filename}'):
-        raise FileNotFoundError(f'{filename} not found in saved_models/')
+    if not os.path.exists(f'{SAVED_MODELS_PATH}/{filename}'):
+        raise FileNotFoundError(f'{filename} not found in {SAVED_MODELS_PATH}')
 
     # Load model
     print(f'Loading model...')
-    model = torch.load(f'saved_models/{filename}', map_location=device, weights_only=False)
+    model = torch.load(f'{SAVED_MODELS_PATH}/{filename}', map_location=device, weights_only=False)
     model.to(device)
-    # print(f'Model {filename} loaded')
 
     return model
 
 
 def save_predictions(predictions, filename):
     # Ensure saved_predictions directory exists
-    os.makedirs('saved_predictions', exist_ok=True)
+    os.makedirs(SAVED_PREDICTIONS_PATH, exist_ok=True)
 
     # Save predictions to CSV in saved_predictions directory
     filename = filename.replace('.pth', '.csv')
     df = pd.DataFrame({'ID': range(len(predictions)), 'Label': predictions})
-    df.to_csv(f'saved_predictions/{filename}', index=False)
+    df.to_csv(f'{SAVED_PREDICTIONS_PATH}/{filename}', index=False)
     print(f'Predictions saved as {filename}')
 
 
@@ -83,9 +86,9 @@ def main(filename=None):
         filenames.append(filename)
     else:
         # Find saved models
-        model_paths = glob.glob('saved_models/*.pth')
+        model_paths = glob.glob(f'{SAVED_MODELS_PATH}/*.pth')
         if not model_paths:
-            raise FileNotFoundError('No models found in saved_models/')
+            raise FileNotFoundError(f'No models found in {SAVED_MODELS_PATH}')
         
         for model_path in model_paths:
             filenames.append(os.path.basename(model_path))

@@ -5,6 +5,10 @@ import torch.optim as optim
 import torchvision
 import torchvision.transforms as transforms
 from model import *
+from utils import get_paths
+
+
+DATASET_PATH, _, SAVED_MODELS_PATH, _ = get_paths()
 
 
 def count_parameters(model):
@@ -29,11 +33,11 @@ def load_data(train_batch_size=128, test_batch_size=100, augment=False):
     print('Loading data...')
 
     # Load CIFAR-10 training dataset
-    trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)
+    trainset = torchvision.datasets.CIFAR10(root=DATASET_PATH, train=True, download=True, transform=transform_train)
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=train_batch_size, shuffle=True, num_workers=2)
 
     # Load CIFAR-10 test dataset
-    testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
+    testset = torchvision.datasets.CIFAR10(root=DATASET_PATH, train=False, download=True, transform=transform)
     testloader = torch.utils.data.DataLoader(testset, batch_size=test_batch_size, shuffle=False, num_workers=2)
 
     return trainloader, testloader
@@ -41,7 +45,7 @@ def load_data(train_batch_size=128, test_batch_size=100, augment=False):
 
 def save_model(model, epoch, accuracy, save='every', every_n=1):
     # Ensure saved_models directory exists
-    os.makedirs('saved_models', exist_ok=True)
+    os.makedirs(SAVED_MODELS_PATH, exist_ok=True)
     
     # Extract model name
     model_name = getattr(model, 'name')
@@ -53,7 +57,7 @@ def save_model(model, epoch, accuracy, save='every', every_n=1):
 
     # Save model in saved_models directory
     if filename:
-        torch.save(model, f'saved_models/{filename}')
+        torch.save(model, f'{SAVED_MODELS_PATH}/{filename}')
         print(f'Model saved as {filename}')
 
 
