@@ -14,7 +14,7 @@ POOL_SIZE = 1
 
 
 # Training parameters
-EPOCHS = 1
+EPOCHS = 30
 TRAIN_BATCH_SIZE = 128
 TEST_BATCH_SIZE = 100
 AUGMENT = True
@@ -41,7 +41,7 @@ if __name__ == '__main__':
     # Train model
     try:
         # Define optimizer
-        # OPTIMIZER = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
+        # OPTIMIZER = optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=5e-4)
         OPTIMIZER = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
         # OPTIMIZER = optim.RMSprop(model.parameters(), lr=0.001, alpha=0.99, eps=1e-8, weight_decay=1e-4)
         
