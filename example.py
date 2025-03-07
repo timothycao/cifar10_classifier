@@ -1,4 +1,5 @@
 import torch.optim as optim
+import torchvision.transforms as transforms
 from model import create_model
 from train import main as train
 from inference import main as inference
@@ -17,7 +18,10 @@ POOL_SIZE = 1
 EPOCHS = 30
 TRAIN_BATCH_SIZE = 128
 TEST_BATCH_SIZE = 100
-AUGMENT = True
+AUGMENTATIONS = [
+    transforms.RandomHorizontalFlip(),
+    transforms.RandomCrop(32, padding=4)
+]
 SAVE_MODE = 'best'  # Options: 'best', 'every'
 SAVE_EVERY_N = 1
 
@@ -56,8 +60,8 @@ if __name__ == '__main__':
         SCHEDULER = SCHEDULER if 'SCHEDULER' in locals() and SCHEDULER is not None else None
 
         # train(model, EPOCHS)
-        train(model, EPOCHS, train_batch_size=TRAIN_BATCH_SIZE, test_batch_size=TEST_BATCH_SIZE, augment=AUGMENT,
-              optimizer=OPTIMIZER, scheduler=SCHEDULER, save=SAVE_MODE, every_n=SAVE_EVERY_N)
+        train(model, EPOCHS, train_batch_size=TRAIN_BATCH_SIZE, test_batch_size=TEST_BATCH_SIZE, augmentations=AUGMENTATIONS,
+                optimizer=OPTIMIZER, scheduler=SCHEDULER, save=SAVE_MODE, every_n=SAVE_EVERY_N)
     except (ValueError, TypeError) as e:
         print(f'Training failed: {e}')
         exit(1)

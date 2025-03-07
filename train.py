@@ -15,29 +15,28 @@ def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 
-def load_data(train_batch_size=128, test_batch_size=100, augment=False):
-    # Define data preprocessing transformations
-    transform = transforms.Compose([
+def load_data(train_batch_size=128, test_batch_size=100, augmentations=None):
+    # Default data preprocessing transformations
+    transform = [
         transforms.ToTensor(),
         transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))    # Normalize using CIFAR-10 mean and std
-    ])
-    
-    # Data augmentation
-    transform_train = transforms.Compose([
-        transforms.RandomHorizontalFlip(),      # Random horizontal flip
-        transforms.RandomCrop(32, padding=4),   # Random cropping
-        transforms.ToTensor(),
-        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))    # Normalize using CIFAR-10 mean and std
-    ]) if augment else transform
+    ]
+
+    if augmentations is None:
+        augmentations = []
+
+    train_transform = transforms.Compose(augmentations + transform)
+    test_transform = transforms.Compose(transform)
 
     print('Loading data...')
+    print('Preprocessing pipeline:\n', train_transform)
 
     # Load CIFAR-10 training dataset
-    trainset = torchvision.datasets.CIFAR10(root=DATASET_PATH, train=True, download=True, transform=transform_train)
+    trainset = torchvision.datasets.CIFAR10(root=DATASET_PATH, train=True, download=True, transform=train_transform)
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=train_batch_size, shuffle=True, num_workers=2)
 
     # Load CIFAR-10 test dataset
-    testset = torchvision.datasets.CIFAR10(root=DATASET_PATH, train=False, download=True, transform=transform)
+    testset = torchvision.datasets.CIFAR10(root=DATASET_PATH, train=False, download=True, transform=test_transform)
     testloader = torch.utils.data.DataLoader(testset, batch_size=test_batch_size, shuffle=False, num_workers=2)
 
     return trainloader, testloader
@@ -85,7 +84,7 @@ def train(model, trainloader, loss_func, optimizer, device):
     # Compute average loss and accuracy for the epoch
     train_loss /= len(trainloader)
     accuracy = 100 * correct / total
-    print(f'TRAIN:  Loss: {train_loss:.4f}  Accuracy: {accuracy:.2f}%')
+    print(f'TRAIN: Loss: {train_loss:.2f} Acc: {accuracy:.2f}%')
 
     # Return accuracy to track best model
     return accuracy
@@ -110,12 +109,12 @@ def test(model, testloader, loss_func, device):
     
     test_loss /= len(testloader)
     accuracy = 100 * correct / total
-    print(f'TEST:   Loss: {test_loss:.4f}  Accuracy: {accuracy:.2f}%')
+    print(f'TEST:  Loss: {test_loss:.2f} Acc: {accuracy:.2f}%')
 
     return accuracy
 
 
-def main(model, epochs, train_batch_size=128, test_batch_size=100, augment=False,
+def main(model, epochs, train_batch_size=128, test_batch_size=100, augmentations=None,
          optimizer=None, scheduler=None, save='best', every_n=1):
     # Count model parameters
     total_params = count_parameters(model)
@@ -127,12 +126,19 @@ def main(model, epochs, train_batch_size=128, test_batch_size=100, augment=False
     save_options = ['best', 'every']
     if save not in save_options:
         raise ValueError(f'Save option must be one of: {save_options}')
+    
+    # Ensure augmentations are valid
+    if augmentations:
+        if not isinstance(augmentations, list):
+            raise TypeError('Augmentations must be a list')
+        if not all((callable(augmentation)) for augmentation in augmentations):
+            raise TypeError('Each augmentation must be a callable torchvision.transforms function')
 
     # Set device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # Load data
-    trainloader, testloader = load_data(train_batch_size, test_batch_size, augment)
+    trainloader, testloader = load_data(train_batch_size, test_batch_size, augmentations)
 
     # Initialize model
     print('Initializing model...')
@@ -156,7 +162,8 @@ def main(model, epochs, train_batch_size=128, test_batch_size=100, augment=False
     print('Training model...')
     best_accuracy, best_epoch = 0.0, 0
     for epoch in range(1, epochs + 1):
-        print(f'Epoch: {epoch}/{epochs}')
+        lr = optimizer.param_groups[0]['lr']
+        print(f"\nEpoch: {f'{epoch}/{epochs}':<10} LR: {lr:.5f}")
         train_accuracy = train(model, trainloader, loss_func, optimizer, device)
         test_accuracy = test(model, testloader, loss_func, device)
 

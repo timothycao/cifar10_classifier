@@ -35,12 +35,7 @@ Place `cifar_test_nolabel.pkl` in the **project root directory**.
 %cd cifar10_classifier
 ```
 
-#### **2. Install dependencies**  
-```sh
-!pip install -r requirements.txt
-```
-
-#### **3. Add dataset via the console**  
+#### **2. Add dataset via the console**  
 Go to **Add Input** → **Search** "Deep Learning Spring 2025: CIFAR 10 classification"
 
 #
@@ -60,6 +55,7 @@ python3 example.py
 #### **1. Import functions**  
 ```python
 import torch.optim as optim
+import torchvision.transforms as transforms
 from model import create_model
 from train import main as train
 from inference import main as inference
@@ -82,14 +78,14 @@ Creates a ResNet model with configurable architecture.
 - `pool_size (int)`: Average pooling kernel size.
 - `name (str)`: Name of the model (used in saved model and prediction filename).
 
-#### `train(model, epochs, train_batch_size, test_batch_size, augment, optimizer, scheduler, save, every_n)`  
+#### `train(model, epochs, train_batch_size, test_batch_size, augmentations, optimizer, scheduler, save, every_n)`  
 Trains the model with tunable parameters and saves in `saved_models/`.
 
 - `model (nn.Module)`: ResNet model to train (must be created using `create_model`).
 - `epochs (int)`: Number of training epochs.
 - `train_batch_size (int, optional)`: Training batch size. Default: `128`.
 - `test_batch_size (int, optional)`: Testing batch size. Default: `100`.
-- `augment (bool, optional)`: Enable data augmentation. Default: `False`.
+- `augmentations (list[callable], optional)`: List of callable torchvision.transforms functions for data augmentation. Default: `None`.
 - `optimizer (torch.optim.Optimizer, optional)`: Training optimizer (must be initialized using torch.optim). Default: `SGD(lr=0.01, momentum=0.9, weight_decay=5e-4)`.
 - `scheduler (torch.optim.lr_scheduler.LRScheduler, optional)`: Learning rate scheduler (must be initialized using torch.optim.lr_scheduler). Default: `None`.
 - `save (str, optional)`: Model saving method: `'best'` (only best model) or `'every'` (every `every_n` epochs). Default: `'best'`.
