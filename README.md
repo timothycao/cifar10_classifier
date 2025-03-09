@@ -68,15 +68,17 @@ See below for function details and `example.py` for usage examples.
 
 ## **Function Overview**
 
-#### `create_model(blocks_per_layer, channels_per_layer, kernels_per_layer, skip_kernels_per_layer, pool_size, name)`  
+#### `create_model(name, block_type, blocks_per_layer, channels_per_layer, kernels_per_layer, skip_kernels_per_layer, expansion, pool_size)`  
 Creates a ResNet model with configurable architecture.
 
+- `name (str)`: Name of the model (used in saved model and prediction filename).
+- `block_type (str)`: Residual block type: `'basic'` or `'bottleneck'`.
 - `blocks_per_layer (list[int])`: Number of residual blocks per layer.
 - `channels_per_layer (list[int])`: Number of channels per layer.
-- `kernels_per_layer (list[int])`: Kernel size per layer.
-- `skip_kernels_per_layer (list[int])`: Skip connection kernel size per layer.
-- `pool_size (int)`: Average pooling kernel size.
-- `name (str)`: Name of the model (used in saved model and prediction filename).
+- `kernels_per_layer (list[int], optional)`: Kernel size per layer. Default: `3` each layer.
+- `skip_kernels_per_layer (list[int], optional)`: Skip connection kernel size per layer. Default: `1` each layer.
+- `expansion (int, optional)`: Expansion for bottleneck blocks. Default: `4`.
+- `pool_size (int, optional)`: Average pooling kernel size. Default: `1`.
 
 #### `train(model, epochs, train_batch_size, test_batch_size, augmentations, optimizer, scheduler, save, every_n)`  
 Trains the model with tunable parameters and saves in `saved_models/`.

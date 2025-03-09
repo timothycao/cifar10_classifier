@@ -190,19 +190,18 @@ def main(model, epochs, train_batch_size=128, test_batch_size=100, augmentations
 if __name__ == '__main__':
     try:
         model = create_model(
+            name='ResNetCustom',
+            block_type='basic',
             blocks_per_layer=[1, 1, 1, 1],
-            channels_per_layer=[8, 16, 32, 64],
-            kernels_per_layer=[3, 3, 3, 3],
-            skip_kernels_per_layer=[1, 1, 1, 1],
-            pool_size=1,
-            name='ResNetCustom'
+            channels_per_layer=[8, 16, 32, 64]
         )
 
         epochs = 3
+        augmentations = [transforms.RandomHorizontalFlip(), transforms.RandomCrop(32, padding=4)]
         optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
         scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=0.1)
 
-        main(model, epochs, augment=True, optimizer=optimizer, scheduler=scheduler)
+        main(model, epochs, augmentations=augmentations, optimizer=optimizer, scheduler=scheduler)
         # main(model, epochs, save='best')    # Save best model only
         # main(model, epochs, save='every')   # Save every epoch
         # main(model, epochs, save='every', every_n=epochs)   # Save every n epochs
