@@ -61,16 +61,20 @@ def save_predictions(predictions, filename):
     print(f'Predictions saved as {filename}')
 
 
-def inference(model, test_images, device):
+def inference(model, test_images, device, batch_size=32):
     model.eval()
     test_images = test_images.to(device)
 
-    print('Running inference...')
+    print(f'Running inference...')
+    predictions = []
     with torch.no_grad():
-        outputs = model(test_images)
-        _, predicted = outputs.max(1)   # Get predicted class
+        for i in range(0, len(test_images), batch_size):
+            batch = test_images[i:i+batch_size]
+            outputs = model(batch)
+            _, predicted = outputs.max(1)
+            predictions.extend(predicted.cpu().numpy())
 
-    return predicted.cpu().numpy()  # Convert to NumPy array
+    return np.array(predictions)
 
 
 def main(filename=None):
