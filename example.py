@@ -24,6 +24,7 @@ AUGMENTATIONS = [
     transforms.RandomHorizontalFlip(),
     transforms.RandomCrop(32, padding=4)
 ]
+CUTMIX_MIXUP = True
 SAVE_MODE = 'best'  # Options: 'best', 'every'
 SAVE_EVERY_N = 1
 
@@ -62,16 +63,16 @@ if __name__ == '__main__':
         # Define scheduler
         # SCHEDULER = optim.lr_scheduler.StepLR(OPTIMIZER, step_size=10, gamma=0.1)
         # SCHEDULER = optim.lr_scheduler.MultiStepLR(OPTIMIZER, milestones=[30, 60, 90], gamma=0.1)
-        # SCHEDULER = optim.lr_scheduler.ExponentialLR(OPTIMIZER, gamma=0.95)
         SCHEDULER = optim.lr_scheduler.CosineAnnealingLR(OPTIMIZER, T_max=EPOCHS)
         # SCHEDULER = optim.lr_scheduler.ReduceLROnPlateau(OPTIMIZER, mode='max', factor=0.1, patience=5)
+        # SCHEDULER = optim.lr_scheduler.OneCycleLR(OPTIMIZER, max_lr=0.01, total_steps=EPOCHS)
         
         # If no scheduler, set to None
         SCHEDULER = SCHEDULER if 'SCHEDULER' in locals() and SCHEDULER is not None else None
 
         # train(model, EPOCHS)
         train(model, EPOCHS, train_batch_size=TRAIN_BATCH_SIZE, test_batch_size=TEST_BATCH_SIZE, augmentations=AUGMENTATIONS,
-                optimizer=OPTIMIZER, scheduler=SCHEDULER, save=SAVE_MODE, every_n=SAVE_EVERY_N)
+              cutmix_mixup=CUTMIX_MIXUP, optimizer=OPTIMIZER, scheduler=SCHEDULER, save=SAVE_MODE, every_n=SAVE_EVERY_N)
     except (ValueError, TypeError) as e:
         print(f'Training failed: {e}')
         exit(1)

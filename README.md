@@ -80,7 +80,7 @@ Creates a ResNet model with configurable architecture.
 - `expansion (int, optional)`: Expansion for bottleneck blocks. Default: `4`.
 - `pool_size (int, optional)`: Average pooling kernel size. Default: `1`.
 
-#### `train(model, epochs, train_batch_size, test_batch_size, augmentations, optimizer, scheduler, save, every_n)`  
+#### `train(model, epochs, train_batch_size, test_batch_size, augmentations, cutmix_mixup, optimizer, scheduler, save, every_n)`  
 Trains the model with tunable parameters and saves in `saved_models/`.
 
 - `model (nn.Module)`: ResNet model to train (must be created using `create_model`).
@@ -88,6 +88,7 @@ Trains the model with tunable parameters and saves in `saved_models/`.
 - `train_batch_size (int, optional)`: Training batch size. Default: `128`.
 - `test_batch_size (int, optional)`: Testing batch size. Default: `100`.
 - `augmentations (list[callable], optional)`: List of callable torchvision.transforms functions for data augmentation. Default: `None`.
+- `cutmix_mixup (bool, optional)`: Whether to apply CutMix and MixUp augmentation per batch. Default: `False`.
 - `optimizer (torch.optim.Optimizer, optional)`: Training optimizer (must be initialized using torch.optim). Default: `SGD(lr=0.01, momentum=0.9, weight_decay=5e-4)`.
 - `scheduler (torch.optim.lr_scheduler.LRScheduler, optional)`: Learning rate scheduler (must be initialized using torch.optim.lr_scheduler). Default: `None`.
 - `save (str, optional)`: Model saving method: `'best'` (only best model) or `'every'` (every `every_n` epochs). Default: `'best'`.

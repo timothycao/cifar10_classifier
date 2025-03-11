@@ -4,6 +4,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torchvision
 import torchvision.transforms as transforms
+import torchvision.transforms.v2 as v2
 from model import *
 from utils import get_paths
 
@@ -60,12 +61,21 @@ def save_model(model, epoch, accuracy, save='every', every_n=1):
         print(f'Model saved as {filename}')
 
 
-def train(model, trainloader, loss_func, optimizer, device):
+def train(model, trainloader, loss_func, optimizer, device, cutmix_mixup=False):
     model.train()
     train_loss, correct, total = 0, 0, 0
 
+    cutmix_or_mixup = None
+    if cutmix_mixup:
+        cutmix = v2.CutMix(num_classes=10)
+        mixup = v2.MixUp(num_classes=10)
+        cutmix_or_mixup = v2.RandomChoice([cutmix, mixup])
+
     for batch_idx, (images, labels) in enumerate(trainloader):
         images, labels = images.to(device), labels.to(device)
+
+        if cutmix_mixup:
+            images, labels = cutmix_or_mixup(images, labels)
 
         optimizer.zero_grad()   # Reset gradients
 
@@ -78,7 +88,7 @@ def train(model, trainloader, loss_func, optimizer, device):
         train_loss += loss.item()   # Track total loss
 
         _, predicted = outputs.max(1)
-        correct += (predicted == labels).sum().item()
+        correct += (predicted == labels.argmax(dim=1)).sum().item() if cutmix_mixup else (predicted == labels).sum().item()
         total += labels.size(0)
     
     # Compute average loss and accuracy for the epoch
@@ -115,7 +125,7 @@ def test(model, testloader, loss_func, device):
 
 
 def main(model, epochs, train_batch_size=128, test_batch_size=100, augmentations=None,
-         optimizer=None, scheduler=None, save='best', every_n=1):
+         cutmix_mixup=False, optimizer=None, scheduler=None, save='best', every_n=1):
     # Count model parameters
     total_params = count_parameters(model)
     print(f'Total model parameters: {total_params}')
@@ -164,7 +174,7 @@ def main(model, epochs, train_batch_size=128, test_batch_size=100, augmentations
     for epoch in range(1, epochs + 1):
         lr = optimizer.param_groups[0]['lr']
         print(f"\nEpoch: {f'{epoch}/{epochs}':<10} LR: {lr:.5f}")
-        train_accuracy = train(model, trainloader, loss_func, optimizer, device)
+        train_accuracy = train(model, trainloader, loss_func, optimizer, device, cutmix_mixup)
         test_accuracy = test(model, testloader, loss_func, device)
 
         # Track best model for 'best' save type
@@ -198,10 +208,11 @@ if __name__ == '__main__':
 
         epochs = 3
         augmentations = [transforms.RandomHorizontalFlip(), transforms.RandomCrop(32, padding=4)]
+        cutmix_mixup = True
         optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
         scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=0.1)
 
-        main(model, epochs, augmentations=augmentations, optimizer=optimizer, scheduler=scheduler)
+        main(model, epochs, augmentations=augmentations, cutmix_mixup=cutmix_mixup, optimizer=optimizer, scheduler=scheduler)
         # main(model, epochs, save='best')    # Save best model only
         # main(model, epochs, save='every')   # Save every epoch
         # main(model, epochs, save='every', every_n=epochs)   # Save every n epochs
