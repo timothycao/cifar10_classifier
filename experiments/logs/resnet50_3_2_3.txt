@@ -1,0 +1,399 @@
+Epoch: 1/100      LR: 0.00008
+TRAIN: Loss: 1.60 Acc: 67.20%
+TEST:  Loss: 0.38 Acc: 90.11%
+
+Epoch: 2/100      LR: 0.00009
+TRAIN: Loss: 1.44 Acc: 66.04%
+TEST:  Loss: 0.34 Acc: 92.22%
+
+Epoch: 3/100      LR: 0.00010
+TRAIN: Loss: 1.37 Acc: 68.29%
+TEST:  Loss: 0.36 Acc: 92.41%
+
+Epoch: 4/100      LR: 0.00013
+TRAIN: Loss: 1.35 Acc: 69.39%
+TEST:  Loss: 0.38 Acc: 92.64%
+
+Epoch: 5/100      LR: 0.00017
+TRAIN: Loss: 1.32 Acc: 69.41%
+TEST:  Loss: 0.33 Acc: 93.52%
+
+Epoch: 6/100      LR: 0.00022
+TRAIN: Loss: 1.32 Acc: 69.66%
+TEST:  Loss: 0.31 Acc: 93.73%
+
+Epoch: 7/100      LR: 0.00028
+TRAIN: Loss: 1.35 Acc: 67.96%
+TEST:  Loss: 0.38 Acc: 93.02%
+
+Epoch: 8/100      LR: 0.00034
+TRAIN: Loss: 1.31 Acc: 68.93%
+TEST:  Loss: 0.38 Acc: 93.27%
+
+Epoch: 9/100      LR: 0.00042
+TRAIN: Loss: 1.32 Acc: 68.93%
+TEST:  Loss: 0.34 Acc: 93.58%
+
+Epoch: 10/100     LR: 0.00050
+TRAIN: Loss: 1.31 Acc: 70.24%
+TEST:  Loss: 0.33 Acc: 93.42%
+
+Epoch: 11/100     LR: 0.00059
+TRAIN: Loss: 1.31 Acc: 69.77%
+TEST:  Loss: 0.35 Acc: 93.41%
+
+Epoch: 12/100     LR: 0.00068
+TRAIN: Loss: 1.32 Acc: 69.65%
+TEST:  Loss: 0.32 Acc: 93.83%
+
+Epoch: 13/100     LR: 0.00078
+TRAIN: Loss: 1.31 Acc: 69.48%
+TEST:  Loss: 0.35 Acc: 93.43%
+
+Epoch: 14/100     LR: 0.00088
+TRAIN: Loss: 1.31 Acc: 69.85%
+TEST:  Loss: 0.35 Acc: 93.92%
+
+Epoch: 15/100     LR: 0.00099
+TRAIN: Loss: 1.30 Acc: 70.17%
+TEST:  Loss: 0.39 Acc: 93.21%
+
+Epoch: 16/100     LR: 0.00109
+TRAIN: Loss: 1.33 Acc: 69.03%
+TEST:  Loss: 0.36 Acc: 93.22%
+
+Epoch: 17/100     LR: 0.00120
+TRAIN: Loss: 1.30 Acc: 70.39%
+TEST:  Loss: 0.39 Acc: 93.09%
+
+Epoch: 18/100     LR: 0.00130
+TRAIN: Loss: 1.29 Acc: 69.54%
+TEST:  Loss: 0.32 Acc: 93.70%
+
+Epoch: 19/100     LR: 0.00140
+TRAIN: Loss: 1.27 Acc: 70.56%
+TEST:  Loss: 0.40 Acc: 92.96%
+
+Epoch: 20/100     LR: 0.00149
+TRAIN: Loss: 1.34 Acc: 68.04%
+TEST:  Loss: 0.38 Acc: 93.19%
+
+Epoch: 21/100     LR: 0.00158
+TRAIN: Loss: 1.29 Acc: 69.74%
+TEST:  Loss: 0.36 Acc: 93.07%
+
+Epoch: 22/100     LR: 0.00166
+TRAIN: Loss: 1.26 Acc: 70.62%
+TEST:  Loss: 0.34 Acc: 93.19%
+
+Epoch: 23/100     LR: 0.00174
+TRAIN: Loss: 1.28 Acc: 70.69%
+TEST:  Loss: 0.33 Acc: 93.60%
+
+Epoch: 24/100     LR: 0.00180
+TRAIN: Loss: 1.28 Acc: 70.68%
+TEST:  Loss: 0.38 Acc: 93.39%
+
+Epoch: 25/100     LR: 0.00186
+TRAIN: Loss: 1.29 Acc: 70.16%
+TEST:  Loss: 0.38 Acc: 93.22%
+
+Epoch: 26/100     LR: 0.00191
+TRAIN: Loss: 1.25 Acc: 70.79%
+TEST:  Loss: 0.36 Acc: 93.42%
+
+Epoch: 27/100     LR: 0.00195
+TRAIN: Loss: 1.28 Acc: 70.01%
+TEST:  Loss: 0.33 Acc: 93.52%
+
+Epoch: 28/100     LR: 0.00198
+TRAIN: Loss: 1.26 Acc: 71.33%
+TEST:  Loss: 0.39 Acc: 92.87%
+
+Epoch: 29/100     LR: 0.00199
+TRAIN: Loss: 1.27 Acc: 70.20%
+TEST:  Loss: 0.32 Acc: 93.38%
+
+Epoch: 30/100     LR: 0.00200
+TRAIN: Loss: 1.27 Acc: 70.51%
+TEST:  Loss: 0.38 Acc: 93.18%
+
+Epoch: 31/100     LR: 0.00200
+TRAIN: Loss: 1.26 Acc: 70.78%
+TEST:  Loss: 0.33 Acc: 93.63%
+
+Epoch: 32/100     LR: 0.00200
+TRAIN: Loss: 1.29 Acc: 70.07%
+TEST:  Loss: 0.35 Acc: 93.31%
+
+Epoch: 33/100     LR: 0.00199
+TRAIN: Loss: 1.27 Acc: 70.23%
+TEST:  Loss: 0.37 Acc: 92.85%
+
+Epoch: 34/100     LR: 0.00198
+TRAIN: Loss: 1.25 Acc: 70.89%
+TEST:  Loss: 0.34 Acc: 93.46%
+
+Epoch: 35/100     LR: 0.00197
+TRAIN: Loss: 1.26 Acc: 71.38%
+TEST:  Loss: 0.31 Acc: 93.76%
+
+Epoch: 36/100     LR: 0.00196
+TRAIN: Loss: 1.29 Acc: 70.28%
+TEST:  Loss: 0.37 Acc: 93.44%
+
+Epoch: 37/100     LR: 0.00195
+TRAIN: Loss: 1.26 Acc: 70.45%
+TEST:  Loss: 0.36 Acc: 93.10%
+
+Epoch: 38/100     LR: 0.00194
+TRAIN: Loss: 1.28 Acc: 69.50%
+TEST:  Loss: 0.42 Acc: 92.92%
+
+Epoch: 39/100     LR: 0.00192
+TRAIN: Loss: 1.28 Acc: 69.13%
+TEST:  Loss: 0.40 Acc: 92.64%
+
+Epoch: 40/100     LR: 0.00190
+TRAIN: Loss: 1.24 Acc: 71.96%
+TEST:  Loss: 0.36 Acc: 93.20%
+
+Epoch: 41/100     LR: 0.00188
+TRAIN: Loss: 1.29 Acc: 70.00%
+TEST:  Loss: 0.30 Acc: 93.55%
+
+Epoch: 42/100     LR: 0.00186
+TRAIN: Loss: 1.29 Acc: 68.84%
+TEST:  Loss: 0.34 Acc: 93.05%
+
+Epoch: 43/100     LR: 0.00183
+TRAIN: Loss: 1.28 Acc: 70.72%
+TEST:  Loss: 0.40 Acc: 93.42%
+
+Epoch: 44/100     LR: 0.00181
+TRAIN: Loss: 1.26 Acc: 70.61%
+TEST:  Loss: 0.31 Acc: 94.01%
+
+Epoch: 45/100     LR: 0.00178
+TRAIN: Loss: 1.27 Acc: 70.07%
+TEST:  Loss: 0.34 Acc: 93.54%
+
+Epoch: 46/100     LR: 0.00175
+TRAIN: Loss: 1.23 Acc: 71.21%
+TEST:  Loss: 0.37 Acc: 93.35%
+
+Epoch: 47/100     LR: 0.00172
+TRAIN: Loss: 1.24 Acc: 71.67%
+TEST:  Loss: 0.33 Acc: 93.49%
+
+Epoch: 48/100     LR: 0.00169
+TRAIN: Loss: 1.27 Acc: 69.81%
+TEST:  Loss: 0.30 Acc: 93.70%
+
+Epoch: 49/100     LR: 0.00166
+TRAIN: Loss: 1.26 Acc: 71.73%
+TEST:  Loss: 0.40 Acc: 93.27%
+
+Epoch: 50/100     LR: 0.00162
+TRAIN: Loss: 1.24 Acc: 71.33%
+TEST:  Loss: 0.33 Acc: 93.77%
+
+Epoch: 51/100     LR: 0.00159
+TRAIN: Loss: 1.23 Acc: 71.40%
+TEST:  Loss: 0.36 Acc: 93.53%
+
+Epoch: 52/100     LR: 0.00155
+TRAIN: Loss: 1.26 Acc: 71.19%
+TEST:  Loss: 0.42 Acc: 93.02%
+
+Epoch: 53/100     LR: 0.00151
+TRAIN: Loss: 1.25 Acc: 71.34%
+TEST:  Loss: 0.36 Acc: 93.37%
+
+Epoch: 54/100     LR: 0.00147
+TRAIN: Loss: 1.25 Acc: 71.78%
+TEST:  Loss: 0.33 Acc: 93.63%
+
+Epoch: 55/100     LR: 0.00143
+TRAIN: Loss: 1.24 Acc: 70.70%
+TEST:  Loss: 0.34 Acc: 93.81%
+
+Epoch: 56/100     LR: 0.00139
+TRAIN: Loss: 1.26 Acc: 70.69%
+TEST:  Loss: 0.35 Acc: 93.90%
+
+Epoch: 57/100     LR: 0.00135
+TRAIN: Loss: 1.23 Acc: 71.89%
+TEST:  Loss: 0.33 Acc: 93.87%
+
+Epoch: 58/100     LR: 0.00131
+TRAIN: Loss: 1.28 Acc: 70.56%
+TEST:  Loss: 0.41 Acc: 93.49%
+
+Epoch: 59/100     LR: 0.00127
+TRAIN: Loss: 1.24 Acc: 71.88%
+TEST:  Loss: 0.35 Acc: 93.81%
+
+Epoch: 60/100     LR: 0.00122
+TRAIN: Loss: 1.25 Acc: 71.23%
+TEST:  Loss: 0.34 Acc: 93.76%
+
+Epoch: 61/100     LR: 0.00118
+TRAIN: Loss: 1.21 Acc: 72.21%
+TEST:  Loss: 0.36 Acc: 93.65%
+
+Epoch: 62/100     LR: 0.00113
+TRAIN: Loss: 1.24 Acc: 71.14%
+TEST:  Loss: 0.37 Acc: 93.35%
+
+Epoch: 63/100     LR: 0.00109
+TRAIN: Loss: 1.22 Acc: 72.00%
+TEST:  Loss: 0.37 Acc: 93.87%
+
+Epoch: 64/100     LR: 0.00105
+TRAIN: Loss: 1.24 Acc: 71.58%
+TEST:  Loss: 0.31 Acc: 93.84%
+
+Epoch: 65/100     LR: 0.00100
+TRAIN: Loss: 1.21 Acc: 72.44%
+TEST:  Loss: 0.35 Acc: 93.66%
+
+Epoch: 66/100     LR: 0.00096
+TRAIN: Loss: 1.23 Acc: 71.87%
+TEST:  Loss: 0.31 Acc: 94.01%
+
+Epoch: 67/100     LR: 0.00091
+TRAIN: Loss: 1.19 Acc: 72.71%
+TEST:  Loss: 0.35 Acc: 93.43%
+
+Epoch: 68/100     LR: 0.00087
+TRAIN: Loss: 1.22 Acc: 71.15%
+TEST:  Loss: 0.37 Acc: 93.81%
+
+Epoch: 69/100     LR: 0.00082
+TRAIN: Loss: 1.21 Acc: 71.34%
+TEST:  Loss: 0.33 Acc: 93.98%
+
+Epoch: 70/100     LR: 0.00078
+TRAIN: Loss: 1.20 Acc: 72.42%
+TEST:  Loss: 0.30 Acc: 94.11%
+
+Epoch: 71/100     LR: 0.00073
+TRAIN: Loss: 1.25 Acc: 71.32%
+TEST:  Loss: 0.36 Acc: 94.13%
+
+Epoch: 72/100     LR: 0.00069
+TRAIN: Loss: 1.22 Acc: 71.57%
+TEST:  Loss: 0.31 Acc: 94.23%
+
+Epoch: 73/100     LR: 0.00065
+TRAIN: Loss: 1.22 Acc: 71.82%
+TEST:  Loss: 0.39 Acc: 93.87%
+
+Epoch: 74/100     LR: 0.00061
+TRAIN: Loss: 1.22 Acc: 71.33%
+TEST:  Loss: 0.36 Acc: 93.76%
+
+Epoch: 75/100     LR: 0.00057
+TRAIN: Loss: 1.22 Acc: 72.12%
+TEST:  Loss: 0.29 Acc: 94.47%
+
+Epoch: 76/100     LR: 0.00053
+TRAIN: Loss: 1.21 Acc: 72.77%
+TEST:  Loss: 0.33 Acc: 94.43%
+
+Epoch: 77/100     LR: 0.00049
+TRAIN: Loss: 1.22 Acc: 71.72%
+TEST:  Loss: 0.30 Acc: 94.47%
+
+Epoch: 78/100     LR: 0.00045
+TRAIN: Loss: 1.20 Acc: 73.13%
+TEST:  Loss: 0.40 Acc: 94.08%
+
+Epoch: 79/100     LR: 0.00041
+TRAIN: Loss: 1.18 Acc: 74.28%
+TEST:  Loss: 0.32 Acc: 94.35%
+
+Epoch: 80/100     LR: 0.00038
+TRAIN: Loss: 1.17 Acc: 73.78%
+TEST:  Loss: 0.35 Acc: 94.37%
+
+Epoch: 81/100     LR: 0.00034
+TRAIN: Loss: 1.20 Acc: 73.45%
+TEST:  Loss: 0.31 Acc: 94.29%
+
+Epoch: 82/100     LR: 0.00031
+TRAIN: Loss: 1.21 Acc: 72.32%
+TEST:  Loss: 0.37 Acc: 94.25%
+
+Epoch: 83/100     LR: 0.00028
+TRAIN: Loss: 1.19 Acc: 73.70%
+TEST:  Loss: 0.41 Acc: 93.83%
+
+Epoch: 84/100     LR: 0.00025
+TRAIN: Loss: 1.21 Acc: 72.01%
+TEST:  Loss: 0.38 Acc: 94.16%
+
+Epoch: 85/100     LR: 0.00022
+TRAIN: Loss: 1.16 Acc: 73.77%
+TEST:  Loss: 0.38 Acc: 94.28%
+
+Epoch: 86/100     LR: 0.00019
+TRAIN: Loss: 1.17 Acc: 74.92%
+TEST:  Loss: 0.33 Acc: 94.55%
+
+Epoch: 87/100     LR: 0.00017
+TRAIN: Loss: 1.20 Acc: 72.87%
+TEST:  Loss: 0.34 Acc: 94.49%
+
+Epoch: 88/100     LR: 0.00014
+TRAIN: Loss: 1.19 Acc: 72.73%
+TEST:  Loss: 0.30 Acc: 94.61%
+
+Epoch: 89/100     LR: 0.00012
+TRAIN: Loss: 1.17 Acc: 74.52%
+TEST:  Loss: 0.35 Acc: 94.68%
+
+Epoch: 90/100     LR: 0.00010
+TRAIN: Loss: 1.17 Acc: 73.80%
+TEST:  Loss: 0.34 Acc: 94.71%
+
+Epoch: 91/100     LR: 0.00008
+TRAIN: Loss: 1.19 Acc: 73.08%
+TEST:  Loss: 0.32 Acc: 94.74%
+
+Epoch: 92/100     LR: 0.00007
+TRAIN: Loss: 1.14 Acc: 75.82%
+TEST:  Loss: 0.29 Acc: 94.91%
+
+Epoch: 93/100     LR: 0.00005
+TRAIN: Loss: 1.14 Acc: 74.44%
+TEST:  Loss: 0.30 Acc: 94.87%
+
+Epoch: 94/100     LR: 0.00004
+TRAIN: Loss: 1.18 Acc: 73.86%
+TEST:  Loss: 0.32 Acc: 94.77%
+
+Epoch: 95/100     LR: 0.00003
+TRAIN: Loss: 1.16 Acc: 73.96%
+TEST:  Loss: 0.30 Acc: 94.98%
+
+Epoch: 96/100     LR: 0.00002
+TRAIN: Loss: 1.15 Acc: 75.40%
+TEST:  Loss: 0.36 Acc: 94.80%
+
+Epoch: 97/100     LR: 0.00001
+TRAIN: Loss: 1.16 Acc: 74.16%
+TEST:  Loss: 0.32 Acc: 94.92%
+
+Epoch: 98/100     LR: 0.00001
+TRAIN: Loss: 1.20 Acc: 72.97%
+TEST:  Loss: 0.36 Acc: 94.78%
+
+Epoch: 99/100     LR: 0.00000
+TRAIN: Loss: 1.17 Acc: 74.15%
+TEST:  Loss: 0.36 Acc: 94.72%
+
+Epoch: 100/100    LR: 0.00000
+TRAIN: Loss: 1.18 Acc: 73.54%
+TEST:  Loss: 0.36 Acc: 94.74%
